@@ -9,10 +9,15 @@
 from ultralytics import YOLO
 model = YOLO('yolov8n-pose.pt')
 ```
+Inference
 ```
 results = model("a_standing_image.jpg")
 for result in results:
   keypoints = result.keypoints
+```
+Predict into video
+```
+model.predict('a_standing_image.jpg', save=True, imgsz=320, conf=0.5)
 ```
 
 ## Input Image
