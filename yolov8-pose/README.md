@@ -1,5 +1,7 @@
 # YOLOv8 Pose
 
+Reference: [Link](https://github.com/jahongir7174/YOLOv8-pose)
+
 16 keypoints
 
 ```
