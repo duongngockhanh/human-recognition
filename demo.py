@@ -45,7 +45,11 @@ class PoseEstimater(object):
             xy = pred_kpts[..., :2]
             xy[..., 0] /= orig_img.shape[1]
             xy[..., 1] /= orig_img.shape[0]
-            return xy.squeeze().numpy(), bbox[0]
+            if len(bbox) > 0:
+                out_bbox = bbox[0]
+            else:
+                out_bbox = None
+            return xy.squeeze().numpy(), out_bbox
 
 
 C = Config()
@@ -93,13 +97,14 @@ if __name__ == "__main__":
                 output_action_idx = np.argmax(output_action)
                 print(f"Action: {output_action_idx} - Time: {duration:.4f}s")
                 frame_seq = frame_seq[1:]
-            
-            frame = cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), color=(0, 0, 255), thickness=2)
-            frame = cv2.putText(frame, 
-                                target_dict[output_action_idx], 
-                                (bbox[0], bbox[1] - 10), 
-                                cv2.FONT_HERSHEY_SIMPLEX, 1, 
-                                (0, 0, 255), 2, cv2.LINE_AA)
+
+            if bbox != None:
+                frame = cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), color=(0, 0, 255), thickness=2)
+                frame = cv2.putText(frame, 
+                                    target_dict[output_action_idx], 
+                                    (bbox[0], bbox[1] - 10), 
+                                    cv2.FONT_HERSHEY_SIMPLEX, 1, 
+                                    (0, 0, 255), 2, cv2.LINE_AA)
             cv2.imshow("Frame", frame)
             if cv2.waitKey(25) & 0xff == ord("q"):
                 break
